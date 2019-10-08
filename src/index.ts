@@ -23,7 +23,7 @@ function getImageAsBuffer(imageUrl: string) {
 }
 
 function getS3Url(s3Path: string): string {
- const prefix = `https://${BUCKET_NAME}.s3.eu-west-3.amazonaws.com`;
+ const prefix = `https://${process.env.BUCKET_NAME}.s3.eu-west-3.amazonaws.com`;
   return `${prefix}/${s3Path}`;
 }
 
