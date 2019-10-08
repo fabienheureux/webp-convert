@@ -23,15 +23,15 @@ function getImageAsBuffer(imageUrl: string) {
 }
 
 function getS3Url(s3Path: string): string {
-  const prefix = "https://wud-staging.s3.eu-west-3.amazonaws.com";
+ const prefix = `https://${BUCKET_NAME}.s3.eu-west-3.amazonaws.com`;
   return `${prefix}/${s3Path}`;
 }
 
-function isObjectInS3(s3: any, bucket: string, key: string): Promise<boolean> {
+function isObjectInS3(s3: any, key: string): Promise<boolean> {
   return new Promise<boolean>(resolve =>
     s3.getObject(
       {
-        Bucket: bucket,
+        Bucket: process.env.BUCKET_NAME || "",
         Key: key
       },
       (err: Error, data: any) => {
@@ -52,10 +52,10 @@ async function convertSourceToWebp(source: string): Promise<Buffer> {
     .toBuffer();
 }
 
-function store(s3: any, bucket: string, key: string, source: string): Promise<string> {
+function store(s3: any, key: string, source: string): Promise<string> {
   return new Promise<string>(async resolve => s3.putObject(
       {
-        Bucket: bucket,
+        Bucket: process.env.BUCKET_NAME || "",
         Key: key,
         ACL: "public-read",
         Body: await convertSourceToWebp(source)
@@ -76,7 +76,7 @@ app.use(async (ctx: Context, next: Function) => {
   /**
    * Check if there is something at the submitted path
    */
-  if (await isObjectInS3(s3, "wud-staging", key)) {
+  if (await isObjectInS3(s3, key)) {
     /**
      * Yep, there is something. 
      * Let's return it.
@@ -89,7 +89,7 @@ app.use(async (ctx: Context, next: Function) => {
      */
     const ext = path.extname(key);
     const webpKey = key.replace(ext, ".webp");
-    ctx.body = getS3Url(await store(s3, "wud-staging", webpKey, source));
+    ctx.body = getS3Url(await store(s3, webpKey, source));
   }
 });
 
