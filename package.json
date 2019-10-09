@@ -13,12 +13,16 @@
   "license": "ISC",
   "dependencies": {
     "aws-sdk": "^2.544.0",
+    "dotenv": "^8.1.0",
     "koa": "^2.8.2",
+    "koa-cache-control": "^2.0.0",
+    "memory-cache": "^0.2.0",
     "request": "^2.88.0",
     "sharp": "^0.23.1"
   },
   "devDependencies": {
     "@types/koa": "^2.0.50",
+    "@types/memory-cache": "^0.2.0",
     "@types/node": "^12.7.11",
     "@types/request": "^2.48.3",
     "@types/sharp": "^0.22.3",
