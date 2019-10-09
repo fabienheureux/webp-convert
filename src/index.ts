@@ -67,24 +67,11 @@ function store(s3: any, key: string, source: string): Promise<string> {
     );
 }
 
-const cache = LRU({
-  maxAge: 30000 // global max age
-})
-
-app.use(koaCash({
-  get (key, maxAge) {
-    return cache.get(key)
-  },
-  set (key, value) {
-    cache.set(key, value)
-  }
-}))
-
 app.use(async (ctx: Context, next: Function) => {
   const { referer } = ctx.request.headers
   const { originalUrl } = ctx
-  if (cache.get(originalUrl) {
-  	ctx.redirect(cache.get(originalUrl)
+  if (cache.get(originalUrl)) {
+  	ctx.redirect(cache.get(originalUrl))
   }
   else {
 	  // const key = (url.parse(source).path || "").slice(1);
@@ -115,7 +102,7 @@ app.use(async (ctx: Context, next: Function) => {
 		     * Let's return it.
 		     */
 		    console.log("ALREADY IN S3, Let's return \n")
-		    cache.put(originalUrl, getS3URL(key))
+		    cache.put(originalUrl, getS3Url(key))
 		  } else {
 		    /**
 		     * Nope ? well, let's convert the source to webp before 
@@ -123,7 +110,7 @@ app.use(async (ctx: Context, next: Function) => {
 		     */
 		    const webpKey = key.replace(ext, ".webp");
 		    console.log("WE CREATED A NEW FILE !")
-		    cache.put(originalUrl, getS3URL(await store(s3, webpKey, source)))
+		    cache.put(originalUrl, getS3Url(await store(s3, webpKey, source)))
 		  }
 	  }
     ctx.redirect(cache.get(originalUrl));
