@@ -18,7 +18,7 @@
     "koa-cache-control": "^2.0.0",
     "memory-cache": "^0.2.0",
     "request": "^2.88.0",
-    "sharp": "^0.23.1"
+    "sharp": "^0.30.5"
   },
   "devDependencies": {
     "@types/koa": "^2.0.50",
